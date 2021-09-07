@@ -1,0 +1,60 @@
+{} S :::
+    9 Mk where Mij shows each tile for i,j < 3
+    value: 0 or 1
+initial state:::
+    3*3 empty grid
+{} A ::: 
+    a. give an unmarked tile a value
+    ... other actions
+func ACTION(s): 
+    given state s and current player? return {} of tiles you can perform A.a 
+RESULT :::
+    state configuration if you apply action a on current state state
+    should be a set of the new tiles if you applied the function
+PATHCOST :::
+    length of solution
+
+
+
+GAME FORMALIZATION:
+
+PLAYER (s) :::
+    given state s, which player
+    adversarial search
+
+ACTION(s) :::
+    given state S, return a {} of legal actions
+
+RESULT ::: 
+    return a new state S, if you apply action A.a on state S,
+
+TERMINAL TEST :::
+    check for state that ends GAME
+
+UTILITY TEST :::
+    utility value for a player if the game ends in terminal state ends
+
+
+
+Things I need to figure out:
+1. The tree :::
+    I already have most of it done. Do you?
+    what I know:
+        a. A state can be a node
+        b. the state could link to other nodes
+    branching factor for my tik-tac-toe ::
+        b. branching factor is 9 for the tiktactoe
+        c. how do I implement this?
+            an array list? 
+            
+    :::
+    going online: 
+        I found an implementation of the tree on stackoverflow.
+        It is a generic tree. Should I use it?
+            there is no direct implementation of a tree in Java.
+            I could build up a data structure from this 
+                should I?
+
+    I'm I selfish?
+    Yes.:.No
+2. The minimax traversal.
