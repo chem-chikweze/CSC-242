@@ -1,6 +1,7 @@
 public class Game {
 
     String player;
+    GameTree tree;
 
     public ArrayList<int> gameActionsAvailable (State s) {
         return s.stateReturnAction();

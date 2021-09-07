@@ -48,13 +48,26 @@ Things I need to figure out:
             an array list? 
             
     :::
-    going online: 
-        I found an implementation of the tree on stackoverflow.
-        It is a generic tree. Should I use it?
-            there is no direct implementation of a tree in Java.
-            I could build up a data structure from this 
-                should I?
+
+    using a generic implementation of a tree.
+
+3. Given the tree, I can now unfold the building of the tree  
+    given initial state:: (it has an array of tiles with marks and loc)
+    a tree
+    and results of action mark (which is a a new state with mark on loc)
+
+    we can add to this tree.
+    
+    how:: ?
+    how do I keep track?
+    how do I add
+    how do i
+    how\\?
+
+    be confident in your ability to create a solution where there was none
 
     I'm I selfish?
     Yes.:.No
+
+
 2. The minimax traversal.

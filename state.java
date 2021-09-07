@@ -1,6 +1,8 @@
 public class State {
 
-    Tile [] state;
+    Tile [] state; //data
+    State parent;
+    ArrayList<State> children;
 
     public State() {
         this.state = new Tile[9];
