@@ -7,10 +7,10 @@ public class Game {
         return s.stateReturnAction();
     }
 
-    public State gameResult(State s, int actionLocation, String playerX) {
+    public State gameResult(State s, int actionLocation) {
         int mark;
 
-        if(playerX.equals("MAX")) {
+        if(gameGetPlayer().equals("MAX")) {
             mark = 1;
         } else if(playerX.equals("MIN")) {
             mark = 0;
@@ -85,7 +85,66 @@ public class Game {
         }
     }
 
+    public int gameGetPlayer() {
+        return 9;
+    }
+
     // UTILITY TEST :::
-    // utility value for a player if the 
-    // game ends in terminal state ends
+    public int gameUtilityFunction(State s, String player) {
+        // do stuff using terminal state
+        // return 1 if p1 wins or -1 if p1 loses or 0 if it's a draw
+    }
+
+    public int miniMax(State state){
+        ArrayList<int> actions = gameActionsAvailable(s);
+    
+        int trackMaximumMin = Integer.MIN_VALUE;
+        int trackActionThatCorrespondsToMaximumMin = 0;
+
+        for(int i = 0; i < actions.size(); i++) {
+            int actionToGo = actions.get(i);
+
+            State res = gameResult(state, actionToGo); // returns a state
+            int minimumUtiltiyOrValue = minValue(res);
+
+            if( Math.max(trackMaximumMin, minimumUtiltiyOrValue) == minimumUtiltiyOrValue) {
+                trackMaximumMin = minimumUtiltiyOrValue;
+                trackActionThatCorrespondsToMaximumMin = actionToGo;
+            }
+        }
+
+        return trackActionThatCorrespondsToMaximumMin;
+    }
+
+    public int minValue(State state) {
+        if(gameTerminalTest(state)) {
+            return gameUtilityFunction(state);
+        }
+
+        int v = Integer.MAX_VALUE;
+        ArrayList<int> actionsAvailable = gameActionsAvailable(s);
+
+        for(int i = 0; i < actionsAvailable.size(); i++) {
+            v = Math.min(v, maxValue(gameResult(state, actionsArray[i])));
+        }
+
+        return v;
+    }
+
+    public int maxValue(State s) {
+        if(gameTerminalTest(state)) {
+            return gameUtilityFunction(state);
+        }
+
+        int v = Integer.MIN_VALUE;
+        ArrayList<int> actionsAvailable = gameActionsAvailable(s);
+
+        for(int i = 0; i < actionsAvailable.size(); i++) {
+            v = Math.max(v, minValue(gameResult(state, actionsArray[i])));
+        }
+
+        return v;
+    }
+
+
 }
