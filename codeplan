@@ -71,3 +71,35 @@ Things I need to figure out:
 
 
 2. The minimax traversal.
+
+
+Given that I have the state, Game and Gametree, what else do I need?
+
+    main:
+    Create game:
+        creates game with initial state
+        the game creates it's game tree using the initial state
+    
+    Game starts: we alternate between Players.
+
+        Player 1: 
+            runs a minimax function on the game tree: to choose what to play:
+
+    How does the mninimax function work?
+        It performs a depth first search of the whole tree
+        Gets to the terminal gets the utility function
+        clock backwards, assign utility value to states based on the state's
+        value from the terminal
+
+Implemnetation of the MiniMax algorithm:::
+    I need to return the action that corresponds to the maximum value if we took 
+    the minValue of the resulting state from going to a from state s
+
+PlayerX ::::
+    should be either a 0 or 1
+
+
+Possible Issues ::::
+    how do I rotate which player is in play?
+    how do I keep track of current player
+    and How do I update current player after a ply.

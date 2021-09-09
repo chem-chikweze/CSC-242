@@ -4,6 +4,9 @@ public class State {
     State parent;
     ArrayList<State> children;
 
+    Boolean pruned;
+    int heuristicValue;
+
     public State() {
         this.state = new Tile[9];
         for(int i = 0; i < 9; i++){
@@ -23,7 +26,7 @@ public class State {
         return this.state;
     }
 
-    public ArrayList<Tile> stateReturnAction() {
+    public ArrayList<int> stateReturnAction() {
         ArrayList<int> actionStates = new ArrayList<int>();
         for(int i = 0; i < state.length; i++) {
             if(!state[i].tileIsTileMarked()) {
