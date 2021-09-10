@@ -7,6 +7,11 @@ public class Tile{
         this.location = loc;
     }
 
+    public Tile(Tile tile) {
+        this.mark = tile.mark;
+        this.location = tile.location;
+    }
+
     public boolean tileIsTileMarked() {
         if(this.mark == -1) {
             return false;

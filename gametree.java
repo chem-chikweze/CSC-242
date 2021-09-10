@@ -1,34 +1,32 @@
 
 import java.util.ArrayList;
 
-// public class GameTree<T> {
-//     // A non generic implementation of the tree.
+public class GameTree {
+    // A non generic implementation of the tree.
 
-//     private State initial;
-     
-//     public GameTree(State initialState) {
-//         this.initial = initialState;
-//         this.root.children = new ArrayList<Node<T>>();
-//     }
-// }
+    State root;
+    ArrayList<State> children;
 
-public class GameTree<T> {
-    private Node<T> root;   
-
-    public GameTree(T treeRoot) {
-        this.root = new Node<T>();
-        this.root.data = treeRoot;
-        this.root.children = new ArrayList<Node<T>>();
+    public GameTree(State initialState) {
+        this.root = initialState;
+        this.children = new ArrayList<State>();
     }
 
-    private class Node<T> {
-
-        T data;
-        Boolean pruned;
-        int heuristicValue;
-        int cost;
-
-        Node<T> parent;
-        ArrayList<Node<T>> children;
-    }   
+    public State getRoot() {
+        return root;
+    }
 }
+
+// public class GameTree<T> {
+//     private Node<T> root;   
+
+//     public GameTree(T treeRoot) {
+//         this.root = new Node<T>();
+//         this.root.data = treeRoot;
+//         this.root.children = new ArrayList<Node<T>>();
+//     }   
+
+//     public Node<T> getRoot() {
+//         return root;
+//     }
+// }

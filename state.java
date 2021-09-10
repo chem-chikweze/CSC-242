@@ -17,6 +17,13 @@ public class State {
         }
     }
 
+    public State(State s) {
+        this.state = new Tile[s.state.length];
+        for(int i = 0; i < 9; i++){
+            this.state[i] = new Tile(s.state[i]);
+        }
+    }
+
     public Tile stateGetTile(int n) {
         return stateGetStateConfig()[n];
     }
