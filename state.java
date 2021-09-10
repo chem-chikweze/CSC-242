@@ -46,6 +46,17 @@ public class State {
         return actionStates;
     }
 
+    public void statePrintConf() {
+        for(int i = 0; i < state.length; i++) {
+
+            System.out.print(state[i].tileGetMark() + " ");
+            if(i == 2 || i == 5) {
+                System.out.println("");
+            }
+        }
+        System.out.println();
+    }
+
     public void stateMarkTile(int n, int mark) {
 
         if(!stateGetStateConfig()[n].tileIsTileMarked()) {
