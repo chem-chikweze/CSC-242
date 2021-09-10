@@ -31,5 +31,4 @@ public class Tile{
         return this.mark;
     }
 
-    public int 
 }

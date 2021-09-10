@@ -1,3 +1,6 @@
+
+import java.util.ArrayList;
+
 // public class GameTree<T> {
 //     // A non generic implementation of the tree.
 
@@ -7,10 +10,9 @@
 //         this.initial = initialState;
 //         this.root.children = new ArrayList<Node<T>>();
 //     }
-    
 // }
 
-public class Tree<T> {
+public class GameTree<T> {
     private Node<T> root;   
 
     public GameTree(T treeRoot) {

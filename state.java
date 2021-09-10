@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class State {
 
     Tile [] state; //data
@@ -7,6 +9,7 @@ public class State {
     Boolean pruned;
     int heuristicValue;
 
+
     public State() {
         this.state = new Tile[9];
         for(int i = 0; i < 9; i++){
@@ -15,22 +18,22 @@ public class State {
     }
 
     public Tile stateGetTile(int n) {
-        return this.state[n];
+        return stateGetStateConfig()[n];
     }
 
     public State stateGetState() {
         return this;
     }
     
-    public Tile[] stateGetStateConf() {
+    public Tile[] stateGetStateConfig() {
         return this.state;
     }
 
-    public ArrayList<int> stateReturnAction() {
-        ArrayList<int> actionStates = new ArrayList<int>();
-        for(int i = 0; i < state.length; i++) {
-            if(!state[i].tileIsTileMarked()) {
-                actionStates.add(state[i].getLocation());
+    public ArrayList<Integer> stateReturnAction() {
+        ArrayList<Integer> actionStates = new ArrayList<Integer>();
+        for(int i = 0; i < stateGetStateConfig().length; i++) {
+            if(!stateGetStateConfig()[i].tileIsTileMarked()) {
+                actionStates.add(stateGetStateConfig()[i].tileGetLocation());
             }
         }
         return actionStates;
@@ -38,14 +41,10 @@ public class State {
 
     public void stateMarkTile(int n, int mark) {
 
-        if(!this.state[n].tileIsTileMarked()) {
-            state[n].tileSetMark(mark);
+        if(!stateGetStateConfig()[n].tileIsTileMarked()) {
+            stateGetStateConfig()[n].tileSetMark(mark);
         }else {
-            System.out.println("tile is marked. Are you making a mistake?")
+            System.out.println("tile is marked. Are you making a mistake?");
         }
     }
-
-    public static void main(String[] args) {
-        
-    }
-}]
+}

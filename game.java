@@ -1,9 +1,13 @@
+import GameTree.java;
+import State.java;
+import java.util.ArrayList;
+
 public class Game {
 
     String player;
     GameTree tree;
 
-    public ArrayList<int> gameActionsAvailable (State s) {
+    public ArrayList<Integer> gameActionsAvailable (State s) {
         return s.stateReturnAction();
     }
 
@@ -12,7 +16,7 @@ public class Game {
 
         if(gameGetPlayer().equals("MAX")) {
             mark = 1;
-        } else if(playerX.equals("MIN")) {
+        } else if(gameGetPlayer().equals("MIN")) {
             mark = 0;
         } else {
             return null;
@@ -85,18 +89,19 @@ public class Game {
         }
     }
 
-    public int gameGetPlayer() {
-        return 9;
+    public String gameGetPlayer() {
+        return "h";
     }
 
     // UTILITY TEST :::
-    public int gameUtilityFunction(State s, String player) {
+    public int gameUtilityFunction(State s) {
         // do stuff using terminal state
         // return 1 if p1 wins or -1 if p1 loses or 0 if it's a draw
     }
 
     public int miniMax(State state){
-        ArrayList<int> actions = gameActionsAvailable(s);
+        // returns action that corresponds to the best play for that state.
+        ArrayList<Integer> actions = gameActionsAvailable(state);
     
         int trackMaximumMin = Integer.MIN_VALUE;
         int trackActionThatCorrespondsToMaximumMin = 0;
@@ -122,28 +127,36 @@ public class Game {
         }
 
         int v = Integer.MAX_VALUE;
-        ArrayList<int> actionsAvailable = gameActionsAvailable(s);
+        ArrayList<Integer> actionsAvailable = gameActionsAvailable(state);
 
         for(int i = 0; i < actionsAvailable.size(); i++) {
-            v = Math.min(v, maxValue(gameResult(state, actionsArray[i])));
+            v = Math.min(v, maxValue(gameResult(state, actionsAvailable.get(i) )));
         }
 
         return v;
     }
 
-    public int maxValue(State s) {
+    public int maxValue(State state) {
         if(gameTerminalTest(state)) {
             return gameUtilityFunction(state);
         }
 
         int v = Integer.MIN_VALUE;
-        ArrayList<int> actionsAvailable = gameActionsAvailable(s);
+        ArrayList<Integer> actionsAvailable = gameActionsAvailable(state);
 
         for(int i = 0; i < actionsAvailable.size(); i++) {
-            v = Math.max(v, minValue(gameResult(state, actionsArray[i])));
+            v = Math.max(v, minValue(gameResult(state, actionsAvailable.get(i))));
         }
 
+     
         return v;
+    }
+
+    public static void  main(String[] args) {
+        Game g = new Game();
+
+        System.out.println("hey");
+        
     }
 
 
