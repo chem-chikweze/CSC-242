@@ -1,31 +1,17 @@
-import GameTree.java;
-import State.java;
 import java.util.ArrayList;
 
 public class Game {
 
     String player;
     GameTree tree;
+    State currentState;
+
+    public GameTree gameGetTree() {
+        return tree;
+    }
 
     public ArrayList<Integer> gameActionsAvailable (State s) {
         return s.stateReturnAction();
-    }
-
-    public State gameResult(State s, int actionLocation) {
-        int mark;
-
-        if(gameGetPlayer().equals("MAX")) {
-            mark = 1;
-        } else if(gameGetPlayer().equals("MIN")) {
-            mark = 0;
-        } else {
-            return null;
-        }
-        
-        State stateReturn = s;
-        stateReturn.state[actionLocation].tileSetMark(mark);
-
-        return stateReturn;
     }
 
     public boolean gameTerminalTest(State s) {
@@ -90,11 +76,12 @@ public class Game {
     }
 
     public String gameGetPlayer() {
-        return "h";
+        return "MAX";
     }
 
     // UTILITY TEST :::
     public int gameUtilityFunction(State s) {
+        return 0;
         // do stuff using terminal state
         // return 1 if p1 wins or -1 if p1 loses or 0 if it's a draw
     }
@@ -137,6 +124,7 @@ public class Game {
     }
 
     public int maxValue(State state) {
+
         if(gameTerminalTest(state)) {
             return gameUtilityFunction(state);
         }
@@ -147,15 +135,54 @@ public class Game {
         for(int i = 0; i < actionsAvailable.size(); i++) {
             v = Math.max(v, minValue(gameResult(state, actionsAvailable.get(i))));
         }
-
-     
         return v;
     }
 
-    public static void  main(String[] args) {
-        Game g = new Game();
+    public Game() {
+        State initialState = new State();
+        tree = new GameTree (initialState);
+        currentState = initialState;
+    }
 
-        System.out.println("hey");
+    public State gameResult(State s, int actionLocation) {
+        int mark;
+
+        if(gameGetPlayer().equals("MAX")) {
+            mark = 1;
+        } else if(gameGetPlayer().equals("MIN")) {
+            mark = 0;
+        } else {
+            return null;
+        }
+        
+        mark = 1;
+        State stateReturn = new State(s);
+        stateReturn.stateGetStateConfig()[actionLocation].tileSetMark(mark);
+
+        return stateReturn;
+    }
+
+    public static void  main(String[] args) {
+        Game game = new Game();
+
+        // int minimax = game.miniMax(game.currentState);
+
+        State rootState = game.gameGetTree().getRoot();
+
+        ArrayList<Integer> available = game.gameActionsAvailable(rootState);
+        for(int i : available) {
+            System.out.println(i);
+        }
+
+        System.out.println("##");
+        
+        State result = game.gameResult(rootState, 1);
+
+        available = game.gameActionsAvailable(result);
+        System.out.println(available.size());
+        for(int i : available) {
+            System.out.println(i + " works");
+        }
         
     }
 
