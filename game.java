@@ -136,18 +136,16 @@ public class Game {
     public State gameResult(State s, int actionLocation) {
         // pain :::
         // which player?
-        // knowing that the depth decreases by 1 on each ply, we link the current player with the modality to 2 of the depth
 
         int mark;
 
         int lengthOfActions = s.stateReturnAction().size();
 
+        // knowing that the depth decreases by 1 on each ply, we link the current player with the modality to 2 of the depth
         if(lengthOfActions % 2 == 1) {
             mark = 1;
-        } else if(lengthOfActions % 2 == 0) {
-            mark = 0;
         } else {
-            return null;
+            mark = 0;
         }
         
         State stateReturn = new State(s);
@@ -168,14 +166,6 @@ public class Game {
         tree = new GameTree (initialState);
         currentState = initialState;
     }
-
-    // public void changePlayer() {
-    //     if(gameGetPlayer().equals("MAX")) {
-    //         this.player = "MIN";
-    //     } else {
-    //         this.player = "MAX";
-    //     }
-    // }
 
     public int miniMax(State state){
         // returns action that corresponds to the best play for that state.
@@ -289,16 +279,15 @@ public class Game {
         rootState.statePrintConf();
         System.out.println("Game starts!");
         while(!game.gameIsItTerminal(rootState) ) {
-            System.out.println("Choose your move");
-            humanMove = reader.nextInt(); // Scans the next token of the input as an int.
-
-            rootState = new State(game.gameResult(rootState, humanMove));
-            rootState.statePrintConf();
 
             computerAction =  game.miniMax(rootState);
             System.out.println("Computer Action is: " + computerAction);
-
             rootState = new State(game.gameResult(rootState, computerAction));
+            rootState.statePrintConf();
+
+            System.out.println("Choose your move");
+            humanMove = reader.nextInt(); // Scans the next token of the input as an int.
+            rootState = new State(game.gameResult(rootState, humanMove));
             rootState.statePrintConf();
         }
 
