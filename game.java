@@ -190,9 +190,8 @@ public class Game {
         } else if (player.equals("MIN")){
             mark = 0;
         } else {
-            // System.out.println("no player selected");
-            mark = 99;
-            // return null;
+            System.out.println("no player selected");
+            mark = 9999;
         }
         
         State stateReturn = new State(s);
@@ -217,7 +216,7 @@ public class Game {
 
     public Game() {
         State initialState = new State();
-        tree = new GameTree (initialState);
+        initialState.stateSetPlayer("MAX");
         currentState = initialState;
     }
 
@@ -241,20 +240,6 @@ public class Game {
         return bestAction;
     }
 
-    public int minValue(State state) {
-        if(gameIsItTerminal(state)) {
-            return gameUtilityFunction(state);
-        }
-
-        int v = Integer.MAX_VALUE;
-        ArrayList<Integer> actionsAvailable = gameActionsAvailable(state);
-
-        for(int i = 0; i < actionsAvailable.size(); i++) {
-            v = Math.min(v, maxValue(gameResult(state, actionsAvailable.get(i) )));
-        }
-        return v;
-    }
-
     public int maxValue(State state) {
         if(state == null) {
             System.out.println("null max");
@@ -266,8 +251,22 @@ public class Game {
         int v = Integer.MIN_VALUE;
         ArrayList<Integer> actionsAvailable = gameActionsAvailable(state);
 
-        for(int i = 0; i < actionsAvailable.size(); i++) {
-            v = Math.max(v, minValue(gameResult(state, actionsAvailable.get(i))));
+        for(int i : actionsAvailable) {
+            v = Math.max(v, minValue(gameResult(state, i)));
+        }
+        return v;
+    }
+
+    public int minValue(State state) {
+        if(gameIsItTerminal(state)) {
+            return gameUtilityFunction(state);
+        }
+
+        int v = Integer.MAX_VALUE;
+        ArrayList<Integer> actionsAvailable = gameActionsAvailable(state);
+
+        for(int i : actionsAvailable) {
+            v = Math.min(v, maxValue(gameResult(state, i)));
         }
         return v;
     }
@@ -279,23 +278,21 @@ public class Game {
 
         int humanMove; // new move
         int computerAction;
-        State rootState = game.gameGetTree().getRoot();
-        rootState.statePlayer = "MAX";
 
         Scanner reader = new Scanner(System.in);  // Reading from System.in
 
-        rootState.statePrintConf();
+        game.currentState.statePrintConf();
         System.out.println("Game starts!");
-        while(!game.gameIsItTerminal(rootState)) {
-            System.out.println("minimax player of root state "+ rootState.statePlayer);
+        while(!game.gameIsItTerminal(game.currentState)) {
+            System.out.println("minimax player of root state "+ game.currentState.statePlayer);
 
-            computerAction =  game.miniMax(rootState);
+            computerAction =  game.miniMax(game.currentState);
             System.out.println("Computer Action is: " + computerAction);
-            rootState = new State(game.gameResult(rootState, computerAction));
+            game.currentState = new State(game.gameResult(game.currentState, computerAction));
 
-            System.out.println(rootState.stateGetStateConfig()[computerAction].tileIsTileMarked() + " is tile marked?");
-            rootState.statePrintConf();
-            if(game.gameIsWin(rootState)){
+            System.out.println(game.currentState.stateGetStateConfig()[computerAction].tileIsTileMarked() + " is tile marked?");
+            game.currentState.statePrintConf();
+            if(game.gameIsWin(game.currentState)){
                 System.out.println("win");
                 break;
             }
@@ -306,17 +303,17 @@ public class Game {
                 System.out.println("Choose your move");
                 humanMove = reader.nextInt(); 
 
-                if (game.gameValidMove(humanMove, rootState) && humanMove != -1){
+                if (game.gameValidMove(humanMove, game.currentState) && humanMove != -1){
                     validMove = false;
                 } else {
                     System.out.println("Invalid Move.");
                 }
             } 
 
-            rootState = new State(game.gameResult(rootState, humanMove));
-            rootState.statePrintConf();
+            game.currentState = new State(game.gameResult(game.currentState, humanMove));
+            game.currentState.statePrintConf();
 
-            if(game.gameIsWin(rootState)){
+            if(game.gameIsWin(game.currentState)){
                 System.out.println("win");
                 break;
             }
@@ -324,8 +321,7 @@ public class Game {
 
         reader.close();
         System.out.println("Game ended.");
-        rootState.statePrintConf();
-
+        game.currentState.statePrintConf();
     }
 
 }
