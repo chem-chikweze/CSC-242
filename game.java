@@ -172,13 +172,15 @@ public class Game {
         }
     }
 
+
     public Boolean gameIsItTerminal(State s) {
+        Boolean tracker = true;
         for(Tile t: s.state) {
             if(t.tileGetMark() == -1) {
-                return false;
+                tracker = false;
             }
         }
-        return true;
+        return tracker;
     }
 
     public State gameResult(State s, int actionLocation) {
