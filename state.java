@@ -10,7 +10,6 @@ public class State {
     Boolean pruned;
     int heuristicValue;
 
-
     public State() {
         this.state = new Tile[9];
         for(int i = 0; i < 9; i++){

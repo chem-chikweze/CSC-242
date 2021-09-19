@@ -7,6 +7,7 @@ public class Game {
     String player;
     GameTree tree;
     State currentState;
+    State[] board;
 
     public GameTree gameGetTree() {
         return tree;
@@ -173,12 +174,25 @@ public class Game {
     }
 
     public Boolean gameIsItTerminal(State s) {
+        Boolean tracker = true;
         for(Tile t: s.state) {
             if(t.tileGetMark() == -1) {
-                return false;
+                tracker = false;
             }
         }
-        return true;
+        return tracker;
+    }
+
+    public Boolean gameIsItTerminal(State[] s) {
+        Boolean tracker = true;
+        for(int i = 0; i < 9; i++) {
+            for(Tile t: s[i].state) {
+                if(t.tileGetMark() == -1) {
+                    tracker =  false;
+                }
+            }
+        }
+        return tracker;
     }
 
     public State gameResult(State s, int actionLocation) {
@@ -271,9 +285,117 @@ public class Game {
         return v;
     }
 
-    public static void  main(String[] args) {
-        Game game = new Game();
+    public int heuristicValue(State s) {
+        int value;
+        if(s.statePlayer.equals("MAX") ) {
+            value = 0;
+        } else {
+            value = 1;
+        }
 
+        int[] test = new int[s.stateGetStateConfig().length];
+        Boolean initialCase = false;
+        for(int i=0; i < s.stateGetStateConfig().length; i++) {
+            test[i] = s.stateGetStateConfig()[i].tileGetMark();
+            if(test[i] != -1) {
+                initialCase  = true;
+            }
+        }
+        if(initialCase == true){
+            return 0;
+        }
+
+        int count;
+        count = 0;
+
+        int a = 0;
+        int b = 1; 
+        int c = 2;
+        if(test[a] == value || test[b] == value || test[c] == value) {
+            count += 1;
+        }
+        if(test[a+1] == value || test[b+1] == value || test[c+1] == value) {
+            count += 1;
+        }
+        if(test[a+2] == value || test[b+2] == value || test[c+2] == value) {
+            count += 1;
+        }
+
+        a = 0;
+        b = 3;
+        c = 6;
+        if(test[a] == value || test[b] == value || test[c] == value) {
+            count += 1;
+        }
+        if(test[a+1] == value || test[b+1] == value || test[c+1] == value) {
+            count += 1;
+        }
+        if(test[a+2] == value || test[b+2] == value || test[c+2] == value) {
+            count += 1;
+        }
+
+        a = 0;
+        b = 4;
+        c = 8;
+        if(test[a] == value || test[b] == value || test[c] == value) {
+            count += 1;
+        }
+
+        a = 2;
+        b = 4;
+        c = 6;
+        if(test[a] == value || test[b] == value || test[c] == value) {
+            count += 1;
+        }
+
+        System.out.println(8-count + " bruh" );
+
+        return 8 - count;    
+    }
+
+    public int alphabeta(State state, int depth, int alpha, int beta, String maximizingPlayer){
+        if(depth  == 0 || gameIsItTerminal(state)) {
+            return heuristicValue(state);
+        }
+        ArrayList<Integer> actions = gameActionsAvailable(state);
+        for(int i: actions) {
+            System.out.print(i+ " ");
+        }
+        System.out.println("");
+        int value;
+    
+        if(maximizingPlayer.equals("MAX")) {
+            value = Integer.MIN_VALUE;
+            for( int i: actions) {
+                value = Math.max(value, alphabeta(gameResult(state, i), depth -1, alpha, beta, "MIN"));
+                if(value >= beta) {
+                    break;
+                }
+                alpha = Math.max(alpha, value);
+            }
+            return value;
+        }else {
+            value = Integer.MAX_VALUE;
+            for( int i: actions) {
+                value = Math.min(value, alphabeta(gameResult(state, i), depth -1, alpha, beta, "MAX"));
+                if(value <= alpha) {
+                    break;
+                }
+                alpha = Math.min(beta, value);
+            }
+            return value;
+        }
+    }
+
+    public Game(int n) {
+        board = new State[n];
+        for(int i = 0; i< n; i++) {
+            board[i] = new State();
+        }
+    }
+
+    public static void  main(String[] args) {
+        Game game = new Game(9);
         System.out.println("Game start");
 
         int humanMove; // new move
@@ -281,12 +403,13 @@ public class Game {
 
         Scanner reader = new Scanner(System.in);  // Reading from System.in
 
-        game.currentState.statePrintConf();
+
         System.out.println("Game starts!");
-        while(!game.gameIsItTerminal(game.currentState)) {
+
+        while(!game.gameIsItTerminal(game.board)) {
             System.out.println("minimax player of root state "+ game.currentState.statePlayer);
 
-            computerAction =  game.miniMax(game.currentState);
+            computerAction =  game.alphabeta(game.currentState, 8, Integer.MIN_VALUE, Integer.MAX_VALUE, game.currentState.statePlayer);
             System.out.println("Computer Action is: " + computerAction);
             game.currentState = new State(game.gameResult(game.currentState, computerAction));
 
