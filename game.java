@@ -16,7 +16,62 @@ public class Game {
         return s.stateReturnAction();
     }
 
+    public Boolean gameIsWin(State s) {
+
+        int[] test = new int[s.stateGetStateConfig().length];
+        for(int i=0; i < s.stateGetStateConfig().length; i++) {
+            test[i] = s.stateGetStateConfig()[i].tileGetMark();
+        }
+
+        int a = 0;
+        int b = 1; 
+        int c = 2;
+        
+        if((test[a] == 0 && test[b] == 0 && test[c] == 0) || (test[a] ==1 && test[b] ==1 && test[c] == 1 )) {
+            return true;
+        } else if( (test[a+1] == 0 && test[b+1] == 0 && test[c+1] == 0) || (test[a+1] == 1 && test[b+1] == 1 &&  test[c+1] == 1) ) {
+            return true;
+        } else if((test[a+2] == 0 && test[b+2] == 0 && test[c+2] == 0) || (test[a+2] == 1 && test[b+2] == 1 &&  test[c+2] == 1)) {
+            return true;
+        }
+       
+
+        a = 0;
+        b = 3;
+        c = 6;
+
+        if((test[a] == 0 && test[b] == 0 && test[c] == 0) || (test[a] ==1 && test[b] ==1 && test[c] == 1 )) {
+            return true;
+        } else if( (test[a+1] == 0 && test[b+1] == 0 && test[c+1] == 0) || (test[a+1] == 1 && test[b+1] == 1 &&  test[c+1] == 1) ) {
+            return true;
+        } else if((test[a+2] == 0 && test[b+2] == 0 && test[c+2] == 0) || (test[a+2] == 1 && test[b+2] == 1 &&  test[c+2] == 1)) {
+            return true;
+        }
+
+        a = 0;
+        b = 4;
+        c = 8;
+
+        if((test[a] == 0 && test[b] == 0 && test[c] == 0) || (test[a] ==1 && test[b] ==1 && test[c] == 1 )) {
+            return true;
+        }
+
+        a = 2;
+        b = 4;
+        c = 6;
+
+        if((test[a] == 0 && test[b] == 0 && test[c] == 0) || (test[a] ==1 && test[b] ==1 && test[c] == 1 )) {
+            return true;
+        }
+
+        return false;
+    }
+
     public int gameUtilityFunction(State s) {
+        String player = s.statePlayer;
+        if(player  ==  null ) {
+            System.out.println("oh sheesh");
+        }
 
         int[] test = new int[s.stateGetStateConfig().length];
         for(int i=0; i < s.stateGetStateConfig().length; i++) {
@@ -47,7 +102,7 @@ public class Game {
 
         String rets = gameTerminalTupleChecks(test, a, b, c);
         if(!rets.equals("DRAW")){
-            if(rets.equals("MIN")) {
+            if(rets.equals("MIN") && player.equals("MAX")) {
                 return -1;
             } else {
                 return 1;
@@ -60,7 +115,7 @@ public class Game {
 
         rets = gameTerminalTupleChecks(test, a, b, c);
         if(!rets.equals("DRAW")){
-            if(rets.equals("MIN")) {
+            if(rets.equals("MIN") && player.equals("MAX")) {
                 return -1;
             } else {
                 return 1;
@@ -99,11 +154,18 @@ public class Game {
         return 0;
     }
 
+    public Boolean gameValidMove (int move, State s) {
+        ArrayList<Integer> validMoves = s.stateReturnAction();
+        for (int x : validMoves) {
+            if(x == move) return true;
+        }
+        return false;
+    }
+
     public String gameTerminalTupleChecks(int[] test, int a, int b, int c) {
-        int sum = test[a] + test[b]+ test[c];
-        if(sum == 0) {
+        if(test[a] == 0 && test[b] == 0 &&  test[c] == 0) {
             return "MIN";
-        } else if(sum == 3){
+        } else if(test[a] == 1 && test[b] == 1 &&  test[c] == 1){
             return "MAX";
         } else{
             return "DRAW";
@@ -116,39 +178,31 @@ public class Game {
                 return false;
             }
         }
-
-        // s.statePrintConf();
-        updateCounter();
         return true;
     }
 
-    public void updateCounter(){
-        count = count + 1;
-    }
-    public int gameGetCounter(){
-        return count;
-    }
-
-    // public String gameGetPlayer() {
-    //     return "MAX";
-    // }
-
     public State gameResult(State s, int actionLocation) {
-        // pain :::
-        // which player?
-
+        String player = s.statePlayer;
         int mark;
 
-        int lengthOfActions = s.stateReturnAction().size();
-
-        // knowing that the depth decreases by 1 on each ply, we link the current player with the modality to 2 of the depth
-        if(lengthOfActions % 2 == 1) {
+        if(player.equals("MAX")) {
             mark = 1;
-        } else {
+        } else if (player.equals("MIN")){
             mark = 0;
+        } else {
+            // System.out.println("no player selected");
+            mark = 99;
+            // return null;
         }
         
         State stateReturn = new State(s);
+        if(player.equals("MIN")) {
+            stateReturn.stateSetPlayer("MAX");
+        } else if(player.equals("MAX")) {
+            stateReturn.stateSetPlayer("MIN");
+        } else {
+            return null;
+        }
         stateReturn.stateGetStateConfig()[actionLocation].tileSetMark(mark);
 
         return stateReturn;
@@ -168,25 +222,23 @@ public class Game {
     }
 
     public int miniMax(State state){
-        // returns action that corresponds to the best play for that state.
         ArrayList<Integer> actions = gameActionsAvailable(state);
         
-        int trackMaximumMin = Integer.MIN_VALUE;
-        int trackActionThatCorrespondsToMaximumMin = 0;
+        int score = Integer.MIN_VALUE;
+        int bestAction = 0;
 
         for(int i = 0; i < actions.size(); i++) {
             int actionToGo = actions.get(i);
 
-            State res = gameResult(state, actionToGo); // pain point
+            State res = gameResult(state, actionToGo);
             int minimumUtiltiyOrValue = minValue(res);
 
-            if( Math.max(trackMaximumMin, minimumUtiltiyOrValue) == minimumUtiltiyOrValue) {
-                trackMaximumMin = minimumUtiltiyOrValue;
-                trackActionThatCorrespondsToMaximumMin = actionToGo;
+            if( Math.max(score, minimumUtiltiyOrValue) == minimumUtiltiyOrValue) {
+                score = minimumUtiltiyOrValue;
+                bestAction = actionToGo;
             }
         }
-
-        return trackActionThatCorrespondsToMaximumMin;
+        return bestAction;
     }
 
     public int minValue(State state) {
@@ -200,11 +252,13 @@ public class Game {
         for(int i = 0; i < actionsAvailable.size(); i++) {
             v = Math.min(v, maxValue(gameResult(state, actionsAvailable.get(i) )));
         }
-
         return v;
     }
 
     public int maxValue(State state) {
+        if(state == null) {
+            System.out.println("null max");
+        }
         if(gameIsItTerminal(state)) {
             return gameUtilityFunction(state);
         }
@@ -215,54 +269,7 @@ public class Game {
         for(int i = 0; i < actionsAvailable.size(); i++) {
             v = Math.max(v, minValue(gameResult(state, actionsAvailable.get(i))));
         }
-
         return v;
-    }
-
-    public Boolean gameIsWin(State s) {
-
-        int[] test = new int[s.stateGetStateConfig().length];
-        for(int i=0; i < s.stateGetStateConfig().length; i++) {
-            test[i] = s.stateGetStateConfig()[i].tileGetMark();
-        }
-
-        int a = 0;
-        int b = 1; 
-        int c = 2;
-        
-        int ret = gameTerminalTestRowColumnCheck(test, a, b, c);
-        if( ret != 0) {
-            return true;
-        } 
-
-        a = 0;
-        b = 3;
-        c = 6;
-
-        ret  = gameTerminalTestRowColumnCheck(test, a, b, c);
-        if( ret != 0) {
-            return true;
-        }
-
-        a = 0;
-        b = 4;
-        c = 8;
-
-        String rets = gameTerminalTupleChecks(test, a, b, c);
-        if(!rets.equals("DRAW")){
-            return true;
-        } 
-
-        a = 2;
-        b = 4;
-        c = 6;
-
-        rets = gameTerminalTupleChecks(test, a, b, c);
-        if(!rets.equals("DRAW")){
-            return true;
-        } 
-
-        return false;
     }
 
     public static void  main(String[] args) {
@@ -273,22 +280,46 @@ public class Game {
         int humanMove; // new move
         int computerAction;
         State rootState = game.gameGetTree().getRoot();
+        rootState.statePlayer = "MAX";
 
         Scanner reader = new Scanner(System.in);  // Reading from System.in
 
         rootState.statePrintConf();
         System.out.println("Game starts!");
-        while(!game.gameIsItTerminal(rootState) ) {
+        while(!game.gameIsItTerminal(rootState)) {
+            System.out.println("minimax player of root state "+ rootState.statePlayer);
 
             computerAction =  game.miniMax(rootState);
             System.out.println("Computer Action is: " + computerAction);
             rootState = new State(game.gameResult(rootState, computerAction));
-            rootState.statePrintConf();
 
-            System.out.println("Choose your move");
-            humanMove = reader.nextInt(); // Scans the next token of the input as an int.
+            System.out.println(rootState.stateGetStateConfig()[computerAction].tileIsTileMarked() + " is tile marked?");
+            rootState.statePrintConf();
+            if(game.gameIsWin(rootState)){
+                System.out.println("win");
+                break;
+            }
+
+            Boolean validMove = true;
+            humanMove = -1;
+            while(validMove) {
+                System.out.println("Choose your move");
+                humanMove = reader.nextInt(); 
+
+                if (game.gameValidMove(humanMove, rootState) && humanMove != -1){
+                    validMove = false;
+                } else {
+                    System.out.println("Invalid Move.");
+                }
+            } 
+
             rootState = new State(game.gameResult(rootState, humanMove));
             rootState.statePrintConf();
+
+            if(game.gameIsWin(rootState)){
+                System.out.println("win");
+                break;
+            }
         }
 
         reader.close();

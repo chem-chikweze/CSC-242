@@ -4,6 +4,7 @@ public class State {
 
     Tile [] state; //data
     State parent;
+    String statePlayer;
     ArrayList<State> children;
 
     Boolean pruned;
@@ -15,6 +16,7 @@ public class State {
         for(int i = 0; i < 9; i++){
             this.state[i] = new Tile(i);
         }
+        statePlayer = "MAX";
     }
 
     public State(State s) {
@@ -22,6 +24,7 @@ public class State {
         for(int i = 0; i < 9; i++){
             this.state[i] = new Tile(s.state[i]);
         }
+        statePlayer = s.statePlayer;
     }
 
     public Tile stateGetTile(int n) {
@@ -55,6 +58,11 @@ public class State {
             }
         }
         System.out.println();
+    }
+
+    public void stateSetPlayer(String play) {
+        statePlayer = play;
+
     }
 
     public void stateMarkTile(int n, int mark) {

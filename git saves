@@ -1,0 +1,6 @@
+ Good Progress:::   
+    minimax runs and works well. I just need to clean the termination clause for the while loop. 
+    I want to make it check if game is in a winnning state. 
+    This way the loop terminates on two conditions: 
+        1. When the game is in a terminal state and 
+        2. When the game is in a winning state
