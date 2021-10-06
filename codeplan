@@ -1,0 +1,18 @@
+## clause ##
+1. holds disjunction of atomic propositions
+2. Uses Hashset of numbers 
+    no duplicates
+    access to union operations
+3. Example: {1, -2, 4}, {7}, {4, 6, 10}
+4. Meaning: x1 is true, x2 is false, x4 is true for {1, -2, 4}
+
+## sentence ##
+1. holds conjunction of clauses
+2. Uses list of clauses i.e a list of {set of literals}
+3. Example: {1, -2, 4} ^ {7} ^ {4, 6, 10} (3 sets joined listed together)
+            Arraylist<clause> sentence = clause1, clause2, clause3
+
+## get symbols ##
+//-> clause: gets the absolute value of each symbol in the clause
+//-> sentence: gets the union of symbols in each clause of the sentence
+
