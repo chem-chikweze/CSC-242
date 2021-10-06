@@ -13,6 +13,51 @@
             Arraylist<clause> sentence = clause1, clause2, clause3
 
 ## get symbols ##
+2. Uses SortedSet of numbers 
+    for ordering of the symbols in ascending order
 //-> clause: gets the absolute value of each symbol in the clause
 //-> sentence: gets the union of symbols in each clause of the sentence
+
+## models ##
+Trade off of using a tree structure to represent models:
+    So we have less data structure to hold at a time???
+
+I decided to use a list:
+    So at each point, I make two copies of the list:
+        and to each copy, I add either a p_true  or a p_false
+        this gives us two models with one additional proposition (the proposition has both an index and a value)
+We could at the end compare the proposition with the knowledge base. 
+    by iterating through the assignment list and for each, we could get its index and compare it with our value in the knowledge or alpha set 
+
+At the end, I called the model class the literal class because it has an index and a value.
+but changed it back to model because it felt safer.
+
+So how would model work:
+    How do we keep track of values in the model.
+    Is it a list of models?
+    or is the model itself a list?
+
+    ##< by the way, I'm using integers for the knowledge base instead of the model data structure: for convenience. How much would this approach cost me? >##
+
+    Maybe a linkedlist of models. 
+        IF So:
+        How are we going to compute pl_check(kb, model) and pl_(a, model)?
+
+        what if we made the model a set like kb and a:
+        on getting p out of our list of symbols:
+        we creat two versions of the set
+        and add +p to one
+        and add -p to the other
+
+        then we continue with the two sets. That way, we won't need the model class.
+        Brilliant.
+    
+    So our model is a clause class. Yep.
+        with the integer value denoting the value of the atomic proposition index (X_index) 
+        and its +ve or -ve sentiment denoting it's logic value truety
+
+        
+    
+
+
 

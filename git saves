@@ -1,3 +1,9 @@
 1: clause and sentence
 //-> untested: clause and sentence.java built with the known methods that would be useful in the entails function
 //-> next steps: implement the ttentails function
+
+2. half of tt_entails, next is pl_true
+//-> untested: implemented half of the ttentails function up to pl_true
+//-> next steps: pl_true : what it is, how it works, why it works, how to create it
+
+

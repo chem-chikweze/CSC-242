@@ -2,7 +2,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class clause {
-    
     Set<Integer> literals;
 
     public clause() {
@@ -41,7 +40,4 @@ public class clause {
         }
         return ret;
     }
-
-
-    
 }
