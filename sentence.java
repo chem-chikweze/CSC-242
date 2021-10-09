@@ -14,7 +14,7 @@ public class sentence {
     }
 
     public Set<Integer> getSymbols() {
-        Set<Integer> ret = new SortedSet<Integer>();
+        Set<Integer> ret = new HashSet();
         for (clause clause : clauses) {
             ret.addAll(clause.getSymbols());
         }

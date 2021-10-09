@@ -12,6 +12,25 @@ public class clause {
         literals = lit;
     }
 
+    public clause add(int i) {
+        literals.add(i);
+        return this;
+    }
+
+    public boolean contains(int j) {
+        for(int i : literals){
+            if(Math.abs(i) == j) return true;
+        }
+        return false;
+    }
+
+    public boolean containsStrict(int j) {
+        for(int i : literals){
+            if(i == j) return true;
+        }
+        return false;
+    }
+
     public void addToClause(int i) {
         literals.add(i);
     }
